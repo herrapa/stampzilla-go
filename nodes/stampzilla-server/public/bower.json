@@ -10,7 +10,8 @@
     "polymer": "^1.7.1",
     "reconnectingWebsocket": "^1.0.0",
     "x-json": "^0.2.3",
-    "time-element": "^1.0.1"
+    "time-element": "^1.0.1",
+    "paper-datatable": "^0.9.8"
   },
   "devDependencies": {
     "web-component-tester": "^5.0.0"

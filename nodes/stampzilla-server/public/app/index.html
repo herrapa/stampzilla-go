@@ -110,6 +110,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 							<iron-icon icon="important-devices"></iron-icon>
 							<span>Devices</span>
 						</a>
+						<a data-route="security" href="/security" on-click="onDataRouteClick">
+							<iron-icon icon="social:notifications"></iron-icon>
+							<span>Security</span>
+						</a>
 					</paper-menu>
 
 					<paper-menu class="list" attr-for-selected="data-route" selected="[[route]]">
@@ -146,6 +150,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 								<iron-selector attr-for-selected="data-route" selected="{{route}}">
 									<section data-route="home">Favorites</section>
 									<section data-route="devices">Devices</section>
+									<section data-route="security">Security</section>
 									<section data-route="actions">Actions</section>
 									<section data-route="rules">Rules</section>
 									<section data-route="schedule">Schedule</section>
@@ -178,6 +183,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 							<section data-route="devices">
 								<stampzilla-devices devices="{{devices}}" nodes="{{nodes}}"></stampzilla-devices>
+							</section>
+
+							<section data-route="security">
+								<paper-material elevation="1">
+									<h1>Users</h1>
+									<stampzilla-security-users></stampzilla-security-users>
+								</paper-material>
+								<paper-material elevation="1">
+									<h1>Zones</h1>
+									<stampzilla-security-zones></stampzilla-security-zones>
+								</paper-material>
 							</section>
 
 							<section data-route="actions">

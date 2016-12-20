@@ -1,0 +1,99 @@
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/paper-datatable/paper-datatable.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/social-icons.html">
+
+<dom-module id="stampzilla-security-zones">
+	<template>
+		<style is="custom-style">
+		</style>
+	
+		<div class="horizontal layout">
+			<div class="horizontal layout flex wrap">
+				<paper-datatable data="{{zones}}" selectable multi-selection>
+					<paper-datatable-column header="Zone" cell-style="white-space:nowrap;" property="title" sortable>
+						</paper-datatable-column>
+						<paper-datatable-column header="Status" style="width:99%" sortable>
+							<template>
+								<template is="dom-if" if="{{item.isFire}}">
+									<div style="color:#F00;">
+										<iron-icon icon="social:notifications-active"></iron-icon> FIRE
+									</div>
+								</template>
+								<template is="dom-if" if="{{!item.isFire}}">
+									<template is="dom-if" if="{{item.isAlarm}}">
+										<div style="color:#F00;">
+											<iron-icon icon="social:notifications-active"></iron-icon> ALARM
+										</div>
+									</template>
+									<template is="dom-if" if="{{!item.isAlarm}}">
+										<template is="dom-if" if="{{item.isArmed}}">
+											<iron-icon icon="lock-outline"></iron-icon> ARMED
+										</template>
+										<template is="dom-if" if="{{!item.isArmed}}">
+											<div style="color:#999;">
+												<iron-icon icon="lock-open"></iron-icon> Disarmed
+											</div>
+										</template>
+									</template>
+								</template>
+							</template>
+						</paper-datatable-column>
+					    <paper-datatable-column header="Sensors" property="sensorCount" sortable>
+						</paper-datatable-column>
+				</paper-datatable>
+				</paper-datatable>
+			</div>
+			<div class="layout horizontal end">
+				<paper-fab icon="add" style="margin-bottom:14px"></paper-fab>
+			</div>
+		</div>
+	</template>
+
+	<script>
+		(function () {
+			Polymer({
+				is: 'stampzilla-security-zones',
+				properties: {
+					zones: {
+						type: Array,
+						value:[],
+						notify: true
+					},
+				},
+				observers: [
+					'zonesChanged(zones.*)'
+				],
+
+				ready: function() {
+					this.zones = [
+						{
+							title: 'Perimeter security',
+							sensorCount: 2,
+							isArmed: true
+						},
+						{
+							title: 'Motion sensors',
+							sensorCount: 2,
+							isArmed: true,
+							isAlarm: true
+						},
+						{
+							title: 'Fire alarm',
+							sensorCount: 3,
+							isArmed: false
+						},
+						{
+							title: 'Fire alarm - Kitchen',
+							sensorCount: 1,
+							isArmed: true,
+							isFire: true
+						}
+					];
+				}
+
+			});
+		})();
+	</script>
+
+</dom-module>

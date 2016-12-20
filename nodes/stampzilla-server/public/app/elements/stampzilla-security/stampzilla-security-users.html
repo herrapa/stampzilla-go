@@ -1,0 +1,109 @@
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+
+<dom-module id="stampzilla-security-users">
+	<template>
+		<style is="custom-style">
+			.circle {
+				position:relative;
+				margin-right:15px;
+			}
+			.circle img {
+				border-radius: 50%;
+				-moz-border-radius: 50%;
+				-webkit-border-radius: 50%;
+				height:125px;
+				width:125px;
+				background: #f00;
+				border:transparent;
+				color: #666;
+
+				font-family: 'Helvetica';
+				font-weight: 300;
+				line-height: 2;  
+				text-align: center;
+
+/*				height: auto;*/
+				display: block;
+				position: relative;
+			}
+
+			.circle img:after {  
+			  content: attr(alt);
+
+			  font-size: 16px;
+			  color: rgb(100, 100, 100);
+
+			  display: table-cell;
+
+			  position: absolute;
+			  z-index: 2;
+			  top: 0;
+			  left: 0;
+			  width: 100%;
+			  height: 100%;
+			  background-color: #fff;
+			  vertical-align: middle;
+			}
+
+			paper-ripple {
+				z-index:3;
+			}
+		</style>
+	
+		<div class="horizontal layout">
+
+			<div class="horizontal layout flex wrap">
+				<template is="dom-repeat" items="[[users]]">
+					<div class="circle center-center vertical layout">
+						<img src="[[item.img]]" data-id="person1" class="circle-image">
+						[[item.name]]
+						<paper-ripple recenters></paper-ripple>
+					</div>
+				</template>
+			</div>
+			<div class="layout horizontal end">
+				<paper-fab icon="add" style="margin-bottom:14px"></paper-fab>
+			</div>
+		</div>
+
+		<iron-ajax
+			auto
+			url="https://randomuser.me/api/?results=5"
+			handle-as="json"
+			last-response="{{last}}"
+			debounce-duration="300"></iron-ajax>
+	</template>
+
+	<script>
+		(function () {
+			Polymer({
+				is: 'stampzilla-security-users',
+				properties: {
+					users: {
+						type: Array,
+						value:[],
+						notify: true
+					},
+					last: {
+						type: Object,
+						observer: "handleResponse",
+						notify: true
+					}
+				},
+				handleResponse: function() {
+					console.log(this.last);
+					var self = this;
+					this.last.results.forEach(function(row) {
+						self.push('users', {
+							name: row.name.first,
+							img: row.picture.large
+						});
+					});
+				}
+			});
+		})();
+	</script>
+
+</dom-module>
