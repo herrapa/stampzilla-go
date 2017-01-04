@@ -14,33 +14,17 @@ var BUILD_DATE string = ""
 // GLOBAL VARS
 var node *protocol.Node
 
-type TargetState struct {
-	Targets    map[string]*Target
-	connection basenode.Connection
+type Config struct {
+	Targets []ConfigTarget `json:"targets"`
 }
 
-var state TargetState
-
-func (s *TargetState) Add(t *Target) {
-	s.Targets[t.Name] = t
-
-	node.AddElement(&protocol.Element{
-		Type:     protocol.ElementTypeText,
-		Name:     t.Name,
-		Feedback: `Targets["` + t.Name + `"].Online`,
-	})
-
-	node.AddElement(&protocol.Element{
-		Type:     protocol.ElementTypeText,
-		Name:     t.Name,
-		Feedback: `Targets["` + t.Name + `"].Lag`,
-	})
-
-	t.start(s.connection)
+type ConfigTarget struct {
+	Name    string `json:"name"`
+	Address string `json:"ip"`
 }
 
 // MAIN - This is run when the init function is done
-func main() { /*{{{*/
+func main() {
 	log.Info("Starting PINGER node")
 	// Create new node description
 	// Parse all commandline arguments, host and port parameters are added in the basenode init function
@@ -51,6 +35,13 @@ func main() { /*{{{*/
 
 	//Activate the config
 	basenode.SetConfig(config)
+
+	nc := &Config{}
+	err := config.NodeSpecific(&nc)
+	if err != nil {
+		log.Error(err)
+		return
+	}
 
 	node = protocol.NewNode("pinger")
 	node.Version = VERSION
@@ -65,21 +56,22 @@ func main() { /*{{{*/
 	// This worker recives all incomming commands
 	go serverRecv(connection.Receive())
 
-	state = TargetState{
+	state = targetState{
 		Targets:    make(map[string]*Target),
 		connection: connection,
 	}
 	node.SetState(state)
 
-	t := &Target{
-		Name: "stamps",
-		Ip:   "10.21.10.115",
+	for _, v := range nc.Targets {
+		t := &Target{
+			Name: v.Name,
+			Ip:   v.Address,
+		}
+		state.add(t)
 	}
 
-	state.Add(t)
-
 	select {}
-} /*}}}*/
+}
 
 // WORKER that monitors the current connection state
 func monitorState(connection basenode.Connection) {
@@ -99,7 +91,7 @@ func serverRecv(recv chan protocol.Command) {
 	}
 }
 
-// THis is called on each incomming command
+// This is called on each incomming command
 func processCommand(cmd protocol.Command) {
 	log.Info("Incoming command from server:", cmd)
 }

@@ -1,14 +1,16 @@
 package main
 
 import (
-	"fmt"
 	"net"
 	"sync"
 	"time"
 
-	"github.com/stampzilla/stampzilla-go/nodes/basenode"
 	"github.com/tatsushid/go-fastping"
 )
+
+type Sender interface {
+	Send(interface{})
+}
 
 type Target struct {
 	Name   string
@@ -21,8 +23,8 @@ type Target struct {
 	sync.Mutex
 }
 
-func (t *Target) start(connection basenode.Connection) {
-	go t.worker(connection)
+func (t *Target) start(notifyFunc func(*Target)) {
+	go t.worker(notifyFunc)
 }
 
 func (t *Target) stop() {
@@ -35,7 +37,7 @@ func (t *Target) stop() {
 	}
 }
 
-func (t *Target) worker(connection basenode.Connection) error {
+func (t *Target) worker(notifyFunc func(*Target)) error {
 	t.shutdown = make(chan bool)
 
 	ra, err := net.ResolveIPAddr("ip4:icmp", t.Ip)
@@ -51,12 +53,13 @@ func (t *Target) worker(connection basenode.Connection) error {
 		t.Lock()
 		t.waiting = false
 		if !t.Online {
-			fmt.Printf("Online: %s receive, RTT: %v\n", addr.String(), rtt)
+			//fmt.Printf("Online: %s receive, RTT: %v\n", addr.String(), rtt)
 			t.Online = true
 		}
 
 		t.Ping = float64(rtt) / float64(time.Millisecond)
-		connection.Send(node.Node())
+		//connection.Send(node.Node())
+		notifyFunc(t)
 
 		t.Unlock()
 	}
@@ -68,8 +71,9 @@ func (t *Target) worker(connection basenode.Connection) error {
 			t.Ping = 0
 			t.Unlock()
 
-			fmt.Printf("Offline: %s\n", ra.String())
-			connection.Send(node.Node())
+			//fmt.Printf("Offline: %s\n", ra.String())
+			//connection.Send(node.Node())
+			notifyFunc(t)
 		}
 	}
 
