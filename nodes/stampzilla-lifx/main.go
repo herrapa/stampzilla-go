@@ -4,6 +4,8 @@ import (
 	//"github.com/bjeanes/go-lifx"
 
 	"flag"
+	"fmt"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -38,8 +40,14 @@ type Node struct {
 }
 
 func main() {
+	printVersion := flag.Bool("v", false, "Prints current version")
 	// Parse all commandline arguments, host and port parameters are added in the basenode init function
 	flag.Parse()
+
+	if *printVersion != false {
+		fmt.Println(VERSION + " (" + BUILD_DATE + ")")
+		os.Exit(0)
+	}
 
 	//Get a config with the correct parameters
 	config := basenode.NewConfig()
@@ -119,32 +127,47 @@ func monitorLampCollection(lights *client.LightCollection, connection basenode.C
 		switch s.Event {
 		case client.LampAdded:
 			log.Warnf("Added: %s (%s)", s.Lamp.Id(), s.Lamp.Label())
+			state.Lock()
+			state.lanProtocol.FoundDevices++
+			state.Unlock()
 
 			state.AddLanDevice(s.Lamp)
 
-			node.AddElement(&protocol.Element{
-				Type: protocol.ElementTypeToggle,
-				Name: s.Lamp.Label(),
-				Command: &protocol.Command{
-					Cmd:  "set",
-					Args: []string{s.Lamp.Id()},
-				},
-				Feedback: "Devices[2].State",
-			})
-			node.AddElement(&protocol.Element{
-				Type: protocol.ElementTypeColorPicker,
-				Name: s.Lamp.Label(),
-				Command: &protocol.Command{
-					Cmd:  "color",
-					Args: []string{s.Lamp.Id()},
-				},
-				Feedback: "Devices[4].State",
-			})
+			//node.AddElement(&protocol.Element{
+			//Type: protocol.ElementTypeToggle,
+			//Name: s.Lamp.Label(),
+			//Command: &protocol.Command{
+			//Cmd:  "set",
+			//Args: []string{s.Lamp.Id()},
+			//},
+			//Feedback: "Devices[2].State",
+			//})
+			//node.AddElement(&protocol.Element{
+			//Type: protocol.ElementTypeColorPicker,
+			//Name: s.Lamp.Label(),
+			//Command: &protocol.Command{
+			//Cmd:  "color",
+			//Args: []string{s.Lamp.Id()},
+			//},
+			//Feedback: "Devices[4].State",
+			//})
 			//log.Infof("Collection: %#v", lights.Lights)
 		case client.LampUpdated:
-			log.Warnf("Changed: %s (%s)", s.Lamp.Id(), s.Lamp.Label())
+			log.Debugf("Changed: %s (%s)", s.Lamp.Id(), s.Lamp.Label())
+			l := state.GetByID(s.Lamp.Id())
+			if l != nil {
+				l.LanConnected = true
+			}
 		case client.LampRemoved:
+			state.Lock()
+			state.lanProtocol.FoundDevices--
+			state.Unlock()
+
 			log.Warnf("Removed: %s (%s)", s.Lamp.Id(), s.Lamp.Label())
+			l := state.GetByID(s.Lamp.Id())
+			if l != nil {
+				l.LanConnected = false
+			}
 		default:
 			log.Infof("Received unknown event: %d", s.Event)
 		}

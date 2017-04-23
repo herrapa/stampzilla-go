@@ -1,5 +1,5 @@
 {
-	"AppName": "stampzilla-aquarium",
+	"AppName": "stampzilla",
 	"ArtifactsDest": "build",
 	"Tasks": [
 		"xc",
