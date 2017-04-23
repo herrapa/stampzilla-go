@@ -1,0 +1,100 @@
+<link rel="import" href="../../bower_components/paper-autocomplete/paper-autocomplete.html">
+
+<dom-module id="stampzilla-action-selector">
+	<style is="custom-style">
+		:host {
+			@apply(--layout-vertical);
+		}
+
+		paper-icon-button.add {
+			background-color: var(--paper-green-400);
+			border-radius: 50%;
+			color: white;
+		}
+	</style>
+	<template>
+
+		<template is="dom-repeat" items="{{cancel}}" as="item" index-as="i">
+			<div class="horizontal layout row">
+				<stampzilla-action-badge cancel="true" uuid="[[item]]" actions={{actions}}></stampzilla-action-badge>
+			</div>
+		</template>
+		<template is="dom-repeat" items="{{activate}}" as="item" index-as="i">
+			<div class="horizontal layout row">
+				<stampzilla-action-badge uuid="[[item]]" actions={{actions}}></stampzilla-action-badge>
+			</div>
+		</template>
+		<div class="horizontal layout">
+			<div class="autocomplete-wrapper flex">
+				<paper-autocomplete name="add-action" value="{{value}}" always-float-label label="Search for an action to add it" id="autocomplete">
+
+				</paper-autocomplete>
+			</div>
+			<paper-icon-button icon="add" id="add" class="add"></paper-icon-button>
+		</div>
+	</template>
+	<script>
+		(function () {
+			Polymer({
+				isText: false,
+				is: 'stampzilla-action-selector',
+				properties: {
+					cancel: {
+						type: Array,
+						value:[],
+						value: true
+					},
+					activate: {
+						type: Array,
+						value:[],
+						notify: true,
+					},
+					actions: {
+						type: Array,
+						value:[],
+						notify: true,
+					},
+					rule: {
+						type: String,
+						notify: true,
+					},
+					value: {
+						type: String,
+						notify: true,
+					}
+				},
+				listeners: {
+        			'add.click': 'handleClick',
+				},
+				observers: [
+					'actionsChanged(actions.*)'
+				],
+				actionsChanged: function() {
+					if (this.actions === undefined || this.actions === undefined) {
+						return;
+					}
+
+					var newlist = [];
+					for( var key in this.actions) {
+						var el = this.actions[key];
+						newlist.push({
+							text: el.name,
+							value: el.uuid, 
+						});
+					};
+					this.$.autocomplete.source = newlist;
+				},
+				handleClick: function(e) {
+					var pkg = {
+						type: 'rules/actions/add',
+						data: this.rule,
+						action: this.value,
+					};
+
+					app.fire('ws-send', pkg);
+				}
+			});
+		})();
+	</script>
+
+</dom-module>

@@ -65,67 +65,90 @@
 				When: <span>[[data.when]]</span>
 			</div>
 			<div class="layout vertical">
-				<div class="m"><paper-radio-button>Sunrise</paper-radio-button></div>
-				<div class="m" style="margin-top:-15px"><paper-radio-button>Sunset</paper-radio-button></div>
+				<div class="m"><paper-radio-button checked="{{sunrise}}">Sunrise</paper-radio-button></div>
+				<div class="m" style="margin-top:-15px"><paper-radio-button checked="{{sunset}}">Sunset</paper-radio-button></div>
 				<div class="m layout vertical" style="background:#eee;">
-					<paper-radio-button>Specific time</paper-radio-button>
+					<paper-radio-button checked="{{cron}}">Specific time</paper-radio-button>
+					<div class="layout horizontal" style="padding-left:27px;">
+
+					</div>
 					<div class="layout horizontal" style="padding-left:27px;">
 						<div class="layout vertical">
-							<strong>Minute</strong>
-							<paper-radio-button>Every minute</paper-radio-button>
-							<paper-radio-button>Even minutes</paper-radio-button>
-							<paper-radio-button>Odd minutes</paper-radio-button>
-							<paper-radio-button>Every 5 minutes</paper-radio-button>
-							<paper-radio-button>Every 15 minutes</paper-radio-button>
-							<paper-radio-button>Every 30 minutes</paper-radio-button>
-							<paper-input></paper-input>
+							<div class="layout vertical">
+								<strong>Minute</strong>
+								<paper-input value="{{minutes}}" disabled="{{!cron}}"></paper-input>
+							</div>
+							<div class="layout vertical">
+								<paper-radio-button checked="{{everyMinute}}" disabled="{{!cron}}">Every minute</paper-radio-button>
+								<paper-radio-button disabled="{{!cron}}">Even minutes</paper-radio-button>
+								<paper-radio-button disabled="{{!cron}}">Odd minutes</paper-radio-button>
+								<paper-radio-button disabled="{{!cron}}">Every 5 minutes</paper-radio-button>
+								<paper-radio-button disabled="{{!cron}}">Every 15 minutes</paper-radio-button>
+								<paper-radio-button disabled="{{!cron}}">Every 30 minutes</paper-radio-button>
+							</div>
 						</div>
 						<div class="layout vertical">
 							<strong>Hour</strong>
-							<paper-radio-button>Every hour</paper-radio-button>
-							<paper-radio-button>Even hours</paper-radio-button>
-							<paper-radio-button>Odd hours</paper-radio-button>
-							<paper-radio-button>Every 6 hours</paper-radio-button>
-							<paper-radio-button>Every 12 hours</paper-radio-button>
-							<paper-input></paper-input>
+							<div class="layout vertical">
+								<paper-input value="{{hours}}" disabled="{{!cron}}"></paper-input>
+							</div>
+							<div class="layout vertical">
+								<paper-radio-button checked="{{everyHour}}" disabled="{{!cron}}">Every hour</paper-radio-button>
+								<paper-radio-button disabled="{{!cron}}">Even hours</paper-radio-button>
+								<paper-radio-button disabled="{{!cron}}">Odd hours</paper-radio-button>
+								<paper-radio-button disabled="{{!cron}}">Every 6 hours</paper-radio-button>
+								<paper-radio-button disabled="{{!cron}}">Every 12 hours</paper-radio-button>
+							</div>
 						</div>
 						<div class="layout vertical">
 							<strong>Day</strong>
-							<paper-radio-button>Every day</paper-radio-button>
-							<paper-radio-button>Even days</paper-radio-button>
-							<paper-radio-button>Odd days</paper-radio-button>
-							<paper-input></paper-input>
+							<div class="layout vertical">
+								<paper-input disabled="{{!cron}}"></paper-input>
+							</div>
+							<div class="layout vertical">
+								<paper-radio-button checked="{{everyDayInMonth}}" disabled="{{!cron}}">Every day</paper-radio-button>
+								<paper-radio-button disabled="{{!cron}}">Even days</paper-radio-button>
+								<paper-radio-button disabled="{{!cron}}">Odd days</paper-radio-button>
+							</div>
 						</div>
 						<div class="layout vertical">
 							<strong>Month</strong>
-							<paper-radio-button>All</paper-radio-button>
-							<paper-radio-button>Odd</paper-radio-button>
-							<paper-radio-button>Even</paper-radio-button>
-							<paper-radio-button>Every quater year</paper-radio-button>
-							<paper-radio-button>Every half year</paper-radio-button>
-							<paper-checkbox>January</paper-checkbox>
-							<paper-checkbox>February</paper-checkbox>
-							<paper-checkbox>Mars</paper-checkbox>
-							<paper-checkbox>April</paper-checkbox>
-							<paper-checkbox>May</paper-checkbox>
-							<paper-checkbox>June</paper-checkbox>
-							<paper-checkbox>July</paper-checkbox>
-							<paper-checkbox>August</paper-checkbox>
-							<paper-checkbox>September</paper-checkbox>
-							<paper-checkbox>October</paper-checkbox>
-							<paper-checkbox>November</paper-checkbox>
-							<paper-checkbox>December</paper-checkbox>
+							<div class="layout vertical">
+							</div>
+							<div class="layout vertical">
+								<paper-radio-button checked="{{everyMonth}}" disabled="{{!cron}}">All</paper-radio-button>
+								<paper-radio-button disabled="{{!cron}}">Odd</paper-radio-button>
+								<paper-radio-button disabled="{{!cron}}">Even</paper-radio-button>
+								<paper-radio-button disabled="{{!cron}}">Every quater year</paper-radio-button>
+								<paper-radio-button disabled="{{!cron}}">Every half year</paper-radio-button>
+								<paper-checkbox disabled="{{!cron}}">January</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">February</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">Mars</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">April</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">May</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">June</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">July</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">August</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">September</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">October</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">November</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">December</paper-checkbox>
+							</div>
 						</div>
 						<div class="layout vertical">
 							<strong>Weekday</strong>
-							<paper-radio-button>All</paper-radio-button>
-							<paper-checkbox>Monday</paper-checkbox>
-							<paper-checkbox>Tuesday</paper-checkbox>
-							<paper-checkbox>Wednesday</paper-checkbox>
-							<paper-checkbox>Thursday</paper-checkbox>
-							<paper-checkbox>Friday</paper-checkbox>
-							<paper-checkbox>Saturday</paper-checkbox>
-							<paper-checkbox>Sunday</paper-checkbox>
+							<div class="layout vertical">
+							</div>
+							<div class="layout vertical">
+								<paper-radio-button checked="{{everyWeekday}}" disabled="{{!cron}}">All</paper-radio-button>
+								<paper-checkbox disabled="{{!cron}}">Monday</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">Tuesday</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">Wednesday</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">Thursday</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">Friday</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">Saturday</paper-checkbox>
+								<paper-checkbox disabled="{{!cron}}">Sunday</paper-checkbox>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -166,7 +189,9 @@
 					schedule: {
 						type: Object,
 						notify: true
-					}
+					},
+
+
 				},
 				observers: [
 				],
@@ -175,6 +200,28 @@
 				},
 
 				ready: function() {
+					this.read();
+				},
+				read: function() {
+					schedule = later.parse.cron(this.data.when, true)['schedules'][0];
+					//console.log(schedule);
+
+					this.sunrise = this.data.when === "@sunrise";
+					this.sunset = this.data.when === "@sunset";
+					this.cron = !this.sunset && !this.sunrise;
+
+					
+					if ( this.cron ) {
+						this.everySecond = schedule['s'] === undefined;
+						this.everyMinute = schedule['m'] === undefined;
+						this.everyHour = schedule['h'] === undefined;
+						this.everyWeekday = schedule['d'] === undefined;
+						this.everyDayInMonth = schedule['D'] === undefined;
+						this.everyMonth = schedule['M'] === undefined;
+
+						this.minutes = schedule['m'];
+						this.hours = schedule['h'];
+					}
 				},
 
 				openDialog: function() {
@@ -187,7 +234,7 @@
 						case "@sunrise":
 							return "At sunrise";
 						default:
-							return prettyCron.toString(data);
+							return prettyCron.toString(data, true);
 					}
 				},
 				_prettycronNext: function(data) {
@@ -197,7 +244,7 @@
 						case "@sunrise":
 							return "-";
 						default:
-							return prettyCron.getNext(data);
+							return prettyCron.getNext(data, true);
 					}
 				}
 

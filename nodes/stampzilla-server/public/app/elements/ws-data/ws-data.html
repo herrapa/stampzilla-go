@@ -150,6 +150,18 @@
 						return;
 
 					case 'actions/all':
+						d.data.sort(function(a, b) {
+							var nameA = a.name.toUpperCase();
+							var nameB = b.name.toUpperCase();
+							if (nameA < nameB) {
+								return -1;
+							}
+							if (nameA > nameB) {
+								return 1;
+							}
+							return 0;
+						});
+
 						this.actions = d.data;
 						return;
 					case 'actions/runner':
@@ -170,7 +182,20 @@
 
 						return;
 					case 'rules/all':
+						d.data.sort(function(a, b) {
+							var nameA = a.name.toUpperCase();
+							var nameB = b.name.toUpperCase();
+							if (nameA < nameB) {
+								return -1;
+							}
+							if (nameA > nameB) {
+								return 1;
+							}
+							return 0;
+						});
+
 						this.rules = d.data;
+					
 						return;
 					case 'schedule/all':
 						this.schedule = d.data;

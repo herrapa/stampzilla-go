@@ -1,0 +1,46 @@
+<dom-module id="stampzilla-condition">
+	<style is="custom-style">
+	</style>
+	<template>
+		<paper-dialog entry-animation="fade-in-animation"
+					  exit-animation="fade-out-animation"
+					  id="dialog"
+					  with-backdrop="true"
+		>
+			<div id="header" class="layout horizontal">
+				<iron-icon icon="assignment"></iron-icon>
+				<h2>[[data.uuid]]</h2>
+			</div>
+		</paper-dialog>
+
+
+		<div class="horizontal layout row">
+			<div ><span>[[data.uuid]]</span> - <span>[[data.statePath]]</span> <span>[[data.comparator]]</span> <span></span>[[data.value]]</div>
+			<paper-icon-button icon="settings" id="settings" title="Click to open settings"></paper-icon-button>
+		</div>
+	</template>
+	<script>
+		(function () {
+			Polymer({
+				isText: false,
+				is: 'stampzilla-condition',
+				properties: {
+					data: {
+						type: Object,
+						notify: true
+					},
+				},
+				observers: [
+				],
+				listeners: {
+        			'settings.click': 'openDialog',
+				},
+				openDialog: function() {
+					console.log('open');
+					this.$.dialog.open();
+				},
+			});
+		})();
+	</script>
+
+</dom-module>
